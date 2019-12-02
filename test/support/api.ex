@@ -26,6 +26,15 @@ defmodule MongoosePush.Support.API do
     {status_code, details}
   end
 
+  def dummy_post(path, json) do
+    HTTPoison.post!(
+      "https://localhost:8443" <> path,
+      Poison.encode!(json),
+      [{"Content-Type", "application/json"}],
+      hackney: [:insecure]
+    )
+  end
+
   def mock_apns(json) do
     {:ok, conn} = get_connection(:apns)
     payload = Poison.encode!(json)

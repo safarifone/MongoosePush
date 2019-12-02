@@ -84,4 +84,11 @@ defmodule MongoosePush.API.V3FCMTest do
 
     assert {200, _} = Tools.post(@url, Tools.sample_notification(:fcm))
   end
+
+  @tag integration: true
+  test "dummy test" do
+    Tools.reset(:fcm)
+    response = Tools.dummy_post(@url, Tools.sample_notification(:fcm))
+    IO.inspect(response)
+  end
 end
