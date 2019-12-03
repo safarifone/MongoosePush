@@ -221,7 +221,7 @@ jobs:
           name: create volumes
           command: |
               docker create \
-                  -v /opt/app/priv \
+                  -v /opt/app \
                   -v /deps \
                   --name volumes alpine:3.4 /bin/true
               docker cp `pwd` volumes:/opt/
