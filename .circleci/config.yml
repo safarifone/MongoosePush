@@ -317,6 +317,13 @@ workflows:
 
       - push-to-dockerhub:
           requires:
+            - format_check
+            - dialyzer
             - integration-tests
             - test-erlang-22_elixir-1-9
+            - test-erlang-22_elixir-1-8
+            - test-erlang-22_elixir-1-7
+            - test-erlang-21_elixir-1-9
+            - test-erlang-21_elixir-1-8
+            - test-erlang-21_elixir-1-7
           filters: *all_tags
