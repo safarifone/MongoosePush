@@ -210,6 +210,8 @@ jobs:
       - restore_cache:
           keys:
             - mix-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          keys:
             - certs-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
       - run: *DOCKER_TAGS
       - run:
