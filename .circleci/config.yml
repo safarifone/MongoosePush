@@ -213,23 +213,37 @@ jobs:
             - certs-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
       - run: *DOCKER_TAGS
       - run:
-          name: xxxx
+          name: Prepare the remote docker
+          command: docker network create integration || true
+      - run:
+          name: create volumes
           command: |
-              docker network create integration || true && \
               docker create \
                   -v /opt/app/priv \
                   -v /deps \
-                  --name volumes alpine:3.4 /bin/true && \
+                  --name volumes alpine:3.4 /bin/true
+      - run:
+          name: copy the stuff into the modules
+          command: |
               docker cp `pwd`/priv volumes:/opt/app/priv && \
-              docker cp `pwd`/deps volumes:/opt/app/deps && \
+              docker cp `pwd`/deps volumes:/opt/app/deps
+      - run:
+          name: beam-builder
+          command: |
               docker run --name beam-builder \
                   --volumes-from volumes \
                   --network integration \
-                  rslota/beam-builder:erlang-22.0_elixir-1.9 && \
+                  rslota/beam-builder:erlang-22.0_elixir-1.9
+      - run:
+          name: fcm
+          command: |
               docker run --name fcm \
                   -p 4000:4000 -p 4001:4001 \
                   --network integration \
-                  mongooseim/fcm-mock-server && \
+                  mongooseim/fcm-mock-server
+      - run:
+          name: mongoose push
+          command: |
               docker run --name MPush \
                   --volumes-from volumes \
                   --network integration \
@@ -240,8 +254,10 @@ jobs:
                   -e TLS_SERVER_CERT_VALIDATION=false \
                   -e FCM_AUTH_ENDPOINT="http://fcm:4001" \
                   -p 8443:8443 \
-                  $DOCKER_IMAGE:$DOCKER_TAG && \
-              docker exec beam-builder MIX_ENV=integration mix test test/api test/api/v3_fcm_test.ex
+                  $DOCKER_IMAGE:$DOCKER_TAG
+      - run:
+          name: RUN
+          command: docker exec beam-builder MIX_ENV=integration mix test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
