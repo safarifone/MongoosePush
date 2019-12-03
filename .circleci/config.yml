@@ -230,7 +230,7 @@ jobs:
       - run:
           name: beam-builder
           command: |
-              docker run -d --name beam-builder \
+              docker run --name beam-builder \
                   --volumes-from volumes \
                   --network integration \
                   rslota/beam-builder:erlang-22.0_elixir-1.9
