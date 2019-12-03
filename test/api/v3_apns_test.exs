@@ -1,7 +1,6 @@
 defmodule MongoosePush.API.V3APNSTest do
   use ExUnit.Case, async: false
   alias MongoosePush.Support.API, as: Tools
-  doctest MongoosePush.API.V3
 
   @url "/v3/notification/f534534543"
 
@@ -89,5 +88,13 @@ defmodule MongoosePush.API.V3APNSTest do
 
     assert {503, %{"reason" => "service_internal"}} =
              Tools.post(@url, Tools.sample_notification(:apns))
+  end
+
+  test "push to apns succeeds" do
+    desc = "OK"
+
+    Tools.reset(:apns)
+
+    assert {200, _} = Tools.post(@url, Tools.sample_notification(:apns))
   end
 end
