@@ -254,7 +254,7 @@ jobs:
                   -e TLS_SERVER_CERT_VALIDATION=false \
                   -e FCM_AUTH_ENDPOINT="http://fcm:4001" \
                   -p 8443:8443 \
-                  $DOCKER_IMAGE:$DOCKER_TAG
+                  $DOCKERHUB_REPOSITORY/$DOCKER_IMAGE:$DOCKER_TAG
       - run:
           name: RUN
           command: docker exec beam-builder MIX_ENV=integration mix test test/api test/api/v3_fcm_test.ex
