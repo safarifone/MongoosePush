@@ -225,7 +225,7 @@ jobs:
                   -v /opt/src \
                   --name volumes alpine:3.4 /bin/true
               docker cp `pwd` volumes:/opt/
-              docker cp `pwd`/* volumes:/opt/src/
+              docker cp `pwd` volumes:/opt/src
       - run:
           name: fcm
           command: |
