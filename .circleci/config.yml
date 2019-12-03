@@ -225,7 +225,7 @@ jobs:
               docker run --name beam-builder \
                   --volumes-from volumes \
                   --network integration \
-                  rslota/beam-builder:erlang-<< parameters.erlang_version >>_elixir-<< parameters.elixir_version >> && \
+                  rslota/beam-builder && \
               docker run --name fcm \
                   -p 4000:4000 -p 4001:4001 \
                   --network integration \
