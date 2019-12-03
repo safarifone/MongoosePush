@@ -212,31 +212,36 @@ jobs:
             - mix-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
             - certs-cache-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
       - run: *DOCKER_TAGS
-      - run: |
-          docker network create integration && \
-          docker create \
-              -v /opt/app/priv \
-              -v /deps \
-              --name volumes alpine:3.4 /bin/true && \
-          docker cp `pwd`/priv volumes:/opt/app/priv && \
-          docker cp `pwd`/deps volumes:~/deps && \
-          docker run --name beam-builder \
-              --volumes-from volumes \
-              --network integration \
-              rslota/beam-builder:erlang-<< parameters.erlang_version >>_elixir-<< parameters.elixir_version >> && \
-          docker run -p 4000:4000 -p 4001:4001 --name fcm --network integration mongooseim/fcm-mock-server && \
-          docker run --name MPush \
-              --volumes-from volumes \
-              --network integration \
-              -e PUSH_FCM_ENABLED=true \
-              -e PUSH_FCM_PORT=4000 \
-              -e PUSH_FCM_ENDPOINT="fcm" \
-              -e PUSH_APNS_ENABLED=false \
-              -e TLS_SERVER_CERT_VALIDATION=false \
-              -e FCM_AUTH_ENDPOINT="http://fcm:4001" \
-              -p 8443:8443 \
-              $DOCKER_IMAGE:$DOCKER_TAG && \
-         docker exec beam-builder MIX_ENV=integration mix test test/api test/api/v3_fcm_test.ex
+      - run:
+          name: xxxx
+          command: |
+              docker network create integration && \
+              docker create \
+                  -v /opt/app/priv \
+                  -v /deps \
+                  --name volumes alpine:3.4 /bin/true && \
+              docker cp `pwd`/priv volumes:/opt/app/priv && \
+              docker cp `pwd`/deps volumes:~/deps && \
+              docker run --name beam-builder \
+                  --volumes-from volumes \
+                  --network integration \
+                  rslota/beam-builder:erlang-<< parameters.erlang_version >>_elixir-<< parameters.elixir_version >> && \
+              docker run --name fcm \
+                  -p 4000:4000 -p 4001:4001 \
+                  --network integration \
+                  mongooseim/fcm-mock-server && \
+              docker run --name MPush \
+                  --volumes-from volumes \
+                  --network integration \
+                  -e PUSH_FCM_ENABLED=true \
+                  -e PUSH_FCM_PORT=4000 \
+                  -e PUSH_FCM_ENDPOINT="fcm" \
+                  -e PUSH_APNS_ENABLED=false \
+                  -e TLS_SERVER_CERT_VALIDATION=false \
+                  -e FCM_AUTH_ENDPOINT="http://fcm:4001" \
+                  -p 8443:8443 \
+                  $DOCKER_IMAGE:$DOCKER_TAG && \
+              docker exec beam-builder MIX_ENV=integration mix test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
