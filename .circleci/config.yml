@@ -221,7 +221,7 @@ jobs:
                   -v /deps \
                   --name volumes alpine:3.4 /bin/true && \
               docker cp `pwd`/priv volumes:/opt/app/priv && \
-              docker cp `pwd`/deps volumes:~/deps && \
+              docker cp `pwd`/deps volumes:/opt/app/deps && \
               docker run --name beam-builder \
                   --volumes-from volumes \
                   --network integration \
