@@ -222,7 +222,7 @@ jobs:
                   -v /opt/app/priv \
                   -v /deps \
                   --name volumes alpine:3.4 /bin/true
-              docker cp `pwd` volumes:/opt
+              docker cp `pwd`/app volumes:/opt
       - run:
           name: fcm
           command: |
