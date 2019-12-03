@@ -230,21 +230,21 @@ jobs:
       - run:
           name: beam-builder
           command: |
-              docker run --name beam-builder \
+              docker run -d --name beam-builder \
                   --volumes-from volumes \
                   --network integration \
                   rslota/beam-builder:erlang-22.0_elixir-1.9
       - run:
           name: fcm
           command: |
-              docker run --name fcm \
+              docker run -d --name fcm \
                   -p 4000:4000 -p 4001:4001 \
                   --network integration \
                   mongooseim/fcm-mock-server
       - run:
           name: mongoose push
           command: |
-              docker run --name MPush \
+              docker run -d --name MPush \
                   --volumes-from volumes \
                   --network integration \
                   -e PUSH_FCM_ENABLED=true \
