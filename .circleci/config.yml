@@ -228,13 +228,6 @@ jobs:
               docker cp `pwd`/priv volumes:/opt/app/priv && \
               docker cp `pwd`/deps volumes:/opt/app/deps
       - run:
-          name: beam-builder
-          command: |
-              docker run --name beam-builder \
-                  --volumes-from volumes \
-                  --network integration \
-                  rslota/beam-builder:erlang-22.0_elixir-1.9
-      - run:
           name: fcm
           command: |
               docker run -d --name fcm \
@@ -256,8 +249,14 @@ jobs:
                   -p 8443:8443 \
                   $DOCKERHUB_REPOSITORY/$DOCKER_IMAGE:$DOCKER_TAG
       - run:
-          name: RUN
-          command: docker exec beam-builder MIX_ENV=integration mix test test/api test/api/v3_fcm_test.ex
+          name: beam-builder
+          command: |
+              docker run --name beam-builder \
+                  --volumes-from volumes \
+                  --network integration \
+                  -e MIX_ENV=integration \
+                  rslota/beam-builder:erlang-22.0_elixir-1.9 \
+                  mix test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
