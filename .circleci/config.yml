@@ -34,6 +34,7 @@ executors:
     docker:
       - image: rslota/beam-builder:erlang-<< parameters.erlang_version >>_elixir-<< parameters.elixir_version >>
       - image: mongooseim/fcm-mock-server
+        command: docker run -p 4000:4000 -p 4001:4001 --name fcm --network n mongooseim/fcm-mock-server
       - image: mobify/apns-http2-mock-server
     working_directory: ~/app
     environment:
@@ -207,7 +208,7 @@ jobs:
       - run:
           name: Run integration tests
           command: ./integration.sh
-
+      - run: MIX_ENV=integration mix do certs.dev, test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
