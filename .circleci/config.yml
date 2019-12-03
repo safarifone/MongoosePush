@@ -222,8 +222,7 @@ jobs:
                   -v /opt/app/priv \
                   -v /deps \
                   --name volumes alpine:3.4 /bin/true
-              docker cp `pwd`/priv volumes:/opt/app
-              docker cp `pwd` volumes:/beam-builder
+              docker cp `pwd` volumes:/opt
       - run:
           name: fcm
           command: |
@@ -252,8 +251,9 @@ jobs:
                   --volumes-from volumes \
                   --network integration \
                   -e MIX_ENV=integration \
+                  -w="/opt/app" \
                   rslota/beam-builder:erlang-22.0_elixir-1.9 \
-                  cd /beam-builder && mix test test/api test/api/v3_fcm_test.ex
+                  mix test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
