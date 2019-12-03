@@ -253,7 +253,7 @@ jobs:
                   -e MIX_ENV=integration \
                   -w="/opt/app" \
                   rslota/beam-builder:erlang-22.0_elixir-1.9 \
-                  mix test test/api test/api/v3_fcm_test.ex
+                  mix do compile, test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
