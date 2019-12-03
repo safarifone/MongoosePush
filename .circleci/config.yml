@@ -215,7 +215,7 @@ jobs:
       - run:
           name: xxxx
           command: |
-              docker network create integration && \
+              docker network create integration || true && \
               docker create \
                   -v /opt/app/priv \
                   -v /deps \
