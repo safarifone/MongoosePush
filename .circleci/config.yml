@@ -254,9 +254,9 @@ jobs:
                   --volumes-from volumes \
                   --network integration \
                   -e MIX_ENV=integration \
-                  -w="/opt/src" \
+                  -w="/opt/src/app" \
                   rslota/beam-builder:erlang-22.0_elixir-1.9 \
-                  mix do compile, test test/api test/api/v3_fcm_test.ex
+                  mix do deps.get, compile, test test/api test/api/v3_fcm_test.ex
 
   push-to-dockerhub:
     executor:
