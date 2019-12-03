@@ -221,10 +221,11 @@ jobs:
           name: create volumes
           command: |
               docker create \
-                  -v /opt/app \
-                  -v /deps \
+                  -v /opt/app/priv \
+                  -v /opt/src \
                   --name volumes alpine:3.4 /bin/true
               docker cp `pwd` volumes:/opt/
+              docker cp `pwd`/* volumes:/opt/src/
       - run:
           name: fcm
           command: |
@@ -253,7 +254,7 @@ jobs:
                   --volumes-from volumes \
                   --network integration \
                   -e MIX_ENV=integration \
-                  -w="/opt/app" \
+                  -w="/opt/src" \
                   rslota/beam-builder:erlang-22.0_elixir-1.9 \
                   mix do compile, test test/api test/api/v3_fcm_test.ex
 
