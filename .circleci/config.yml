@@ -224,7 +224,7 @@ jobs:
                   --name volumes alpine:3.4 /bin/true
               docker cp `pwd`/priv volumes:/opt/app
               docker cp `pwd`/deps volumes:/opt/app
-              docker run --volumes-from configs app-image:1.2.3
+              docker cp `pwd`/app volumes:/opt/app
       - run:
           name: fcm
           command: |
