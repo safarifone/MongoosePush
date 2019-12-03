@@ -206,7 +206,8 @@ jobs:
       - run: *DOCKER_TAGS
       - run:
           name: Run integration tests
-          command: echo "ok"
+          command: ./integration.sh
+
 
   push-to-dockerhub:
     executor:
